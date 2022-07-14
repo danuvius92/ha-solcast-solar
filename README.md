@@ -1,12 +1,15 @@
-# Solcast Solar 
+# Solcast Solar (under 1kWh)
 
 Home Assistant(https://www.home-assistant.io/) Component
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
+This version is modified to divide each value by 2, so you can implement your solar system lower than 1 kWh. Therfore double your values on the solcast website (700w panel -> 1400w ; 600w inverter -> 1200w)
+
 This custom component integrates the Solcast API into Home Assistant.
 
 Modified from the great works of
+* oziee/ha-solcast-solar
 * dannerph/homeassistant-solcast
 * cjtapper/solcast-py
 * home-assistant-libs/forecast_solar
