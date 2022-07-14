@@ -1,4 +1,4 @@
-# Solcast Solar (under 1kWh)
+# Solcast Solar (0.5kWh to 1kWh)
 
 Home Assistant(https://www.home-assistant.io/) Component
 
