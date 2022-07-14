@@ -519,9 +519,9 @@ class SolcastApi:
             else:
                 if lastv == 0.0:
                     #add the last one
-                    wh_hours[lastk] = lastv * 1000
+                    wh_hours[lastk] = ((lastv * 1000)/2)
 
-                wh_hours[d] = v['pv_estimate'] * 1000
+                wh_hours[d] = ((v['pv_estimate'] * 1000)/2)
                 
                 lastk = d
                 lastv = v['pv_estimate']
