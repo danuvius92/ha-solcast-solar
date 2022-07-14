@@ -224,7 +224,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone()
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000)
+            return int(g[0]['pv_estimate'] * 1000 / 2)
         except Exception:
             return 0
 
