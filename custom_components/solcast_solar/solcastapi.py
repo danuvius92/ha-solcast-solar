@@ -198,7 +198,7 @@ class SolcastApi:
                 if p["period_end"].hour >= h:
                     tot += p["pv_estimate"]
             
-            return round(tot,2)
+            return (round(tot,2)/2)
         except Exception:
             return 0
     
@@ -251,7 +251,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int(m * 1000)
+            return int((m * 1000)/2)
         except Exception:
             return 0
 
@@ -285,7 +285,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int(m * 1000)
+            return int((m * 1000)/2)
         except Exception:
             return 0
 
