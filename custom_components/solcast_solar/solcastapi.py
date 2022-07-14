@@ -150,7 +150,7 @@ class SolcastApi:
         """Return a rooftop sites total kw for today"""
         #g = [d for d in self._sites if d['resource_id'] == rooftopid]   
         try:
-            return ((self._data["siteinfo"][rooftopid]['tally'])/2)
+            return self._data["siteinfo"][rooftopid]['tally']
         except Exception:
             return 0
 
@@ -166,9 +166,9 @@ class SolcastApi:
             if "resource_id" in site:
                 d["resource_id"] = site["resource_id"]
             if "capacity" in site:
-                d["capacity"] = site["capacity"]
+                d["capacity"] = site["capacity"] / 2
             if "capacity_dc" in site:
-                d["capacity_dc"] = site["capacity_dc"]
+                d["capacity_dc"] = site["capacity_dc"] / 2
             if "longitude" in site:
                 d["longitude"] = site["longitude"]
             if "latitude" in site:
@@ -182,7 +182,7 @@ class SolcastApi:
             if "loss_factor" in site:
                 d["loss_factor"] = site["loss_factor"]
 
-            return (d/2)
+            return d
         except Exception:
             return {}
 
@@ -198,7 +198,7 @@ class SolcastApi:
                 if p["period_end"].hour >= h:
                     tot += p["pv_estimate"]
             
-            return (round(tot,2)/2)
+            return round(tot,2)
         except Exception:
             return 0
     
@@ -224,7 +224,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone()
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 / 2)
+            return int(g[0]['pv_estimate'] * 1000)
         except Exception:
             return 0
 
@@ -232,7 +232,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone() + timedelta(hours=1)
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 / 2)
+            return int(g[0]['pv_estimate'] * 1000)
         except Exception:
             return 0
 
@@ -241,7 +241,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return ((round(sum(z['pv_estimate'] for z in g if z),2))/2)
+            return round(sum(z['pv_estimate'] for z in g if z),2)
         except Exception:
             return 0
 
@@ -251,7 +251,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int((m * 1000)/2)
+            return int(m * 1000)
         except Exception:
             return 0
 
@@ -275,7 +275,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return (round(sum(z['pv_estimate'] for z in g if z),2)/2)
+            return round(sum(z['pv_estimate'] for z in g if z),2)
         except Exception:
             return 0
 
@@ -285,7 +285,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int((m * 1000)/2)
+            return int(m * 1000)
         except Exception:
             return 0
 
@@ -344,7 +344,7 @@ class SolcastApi:
                     for x in ae['estimated_actuals']:
                         z = parse_datetime(x['period_end']).astimezone() - timedelta(minutes=30)
                         if z.date() == today:
-                            _data.append({"period_end": z,"pv_estimate": x["pv_estimate"]*0.5})
+                            _data.append({"period_end": z,"pv_estimate": x["pv_estimate"]*0.25})
 
                     _data = sorted(_data, key=itemgetter("period_end"))
                     #_s.update({site['resource_id']:{'estimated_actuals': _data}})
@@ -358,7 +358,7 @@ class SolcastApi:
                 for x in af['forecasts']:
                     z = parse_datetime(x['period_end']).astimezone() - timedelta(minutes=30)
                     if z.date() < lastday:
-                        _data2.append({"period_end": z,"pv_estimate": x["pv_estimate"]*0.5})
+                        _data2.append({"period_end": z,"pv_estimate": x["pv_estimate"]*0.25})
 
                 # _data2 = sorted(_data2, key=itemgetter("period_end"))
                 # _s.update({site['resource_id']:{'forecasts': _data2}})
@@ -519,9 +519,9 @@ class SolcastApi:
             else:
                 if lastv == 0.0:
                     #add the last one
-                    wh_hours[lastk] = ((lastv * 1000)/2)
+                    wh_hours[lastk] = lastv * 1000
 
-                wh_hours[d] = ((v['pv_estimate'] * 1000)/2)
+                wh_hours[d] = v['pv_estimate'] * 1000
                 
                 lastk = d
                 lastv = v['pv_estimate']
