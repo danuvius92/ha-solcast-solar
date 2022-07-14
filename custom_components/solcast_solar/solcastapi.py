@@ -150,7 +150,7 @@ class SolcastApi:
         """Return a rooftop sites total kw for today"""
         #g = [d for d in self._sites if d['resource_id'] == rooftopid]   
         try:
-            return self._data["siteinfo"][rooftopid]['tally']
+            return ((self._data["siteinfo"][rooftopid]['tally'])/2)
         except Exception:
             return 0
 
@@ -182,7 +182,7 @@ class SolcastApi:
             if "loss_factor" in site:
                 d["loss_factor"] = site["loss_factor"]
 
-            return d
+            return (d/2)
         except Exception:
             return {}
 
@@ -232,7 +232,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone() + timedelta(hours=1)
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000)
+            return int(g[0]['pv_estimate'] * 1000 / 2)
         except Exception:
             return 0
 
@@ -241,7 +241,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return round(sum(z['pv_estimate'] for z in g if z),2)
+            return ((round(sum(z['pv_estimate'] for z in g if z),2))/2)
         except Exception:
             return 0
 
@@ -275,7 +275,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return round(sum(z['pv_estimate'] for z in g if z),2)
+            return (round(sum(z['pv_estimate'] for z in g if z),2)/2)
         except Exception:
             return 0
 
