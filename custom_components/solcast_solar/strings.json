@@ -2,7 +2,7 @@
     "config": {
         "step": {
         "user": {
-            "description": "Fill in the data for your solar panels.",
+            "description": "Fill in your API Key from Solcast. Select in the second field your divider. If you doubled your numbers at solcast, set to 2. If tripled, set to 3.",
             "data": {
                 "api_key": "Solcast API key",
                 "resource_id": "Solcast rooftop id",
