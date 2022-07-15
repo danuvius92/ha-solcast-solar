@@ -1,26 +1,25 @@
-
 {
     "config": {
         "step": {
-            "user": {
-                "data": {
-                    "api_key": "Solcast API key",
-                    "resource_id": "Solcast rooftop id",
-                    "name": "Name"
-                },
-                "description": "Fill in the data of your solar panels."
+        "user": {
+            "description": "Fill in your API Key from Solcast. Select in the second field your divider. If you doubled your numbers at solcast, set to 2. If tripled, set to 3.",
+            "data": {
+                "api_key": "Solcast API key",
+                "resource_id": "Solcast rooftop id",
+                "name": "[%key:common::config_flow::data::name%]"
+                }
             }
         }
     },
     "options": {
         "step": {
-            "init": {
-                "data": {
-                    "api_key": "Solcast API key",
-                    "resource_id": "Solcast rooftop id",
-                    "name": "Name"
-                },
-                "description": "These values allow tweaking the Solcast Integration."
+        "init": {
+            "description": "These values allow tweaking the Solcast integration.",
+            "data": {
+                "api_key": "Solcast API key",
+                "resource_id": "Solcast rooftop id",
+                "name": "[%key:common::config_flow::data::name%]"
+                }
             }
         }
     },
@@ -33,4 +32,3 @@
         }
     }
 }
-
