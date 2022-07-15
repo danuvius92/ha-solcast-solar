@@ -5,13 +5,11 @@ from typing import Any
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
-from homeassistant.const import CONF_API_KEY
-from homeassistant.const import NUMBER
+from homeassistant.const import CONF_API_KEY, CONF_ELSE
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
 from .const import DOMAIN
-
 
 class SolcastSolarFlowHandler(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Solcast Solar."""
@@ -36,7 +34,7 @@ class SolcastSolarFlowHandler(ConfigFlow, domain=DOMAIN):
                 data = {},
                 options={
                     CONF_API_KEY: user_input[CONF_API_KEY],
-                    NUMBER: user_input[NUMBER],
+                    CONF_ELSE: user_input[CONF_ELSE],
                 },
             )
 
@@ -45,7 +43,7 @@ class SolcastSolarFlowHandler(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(CONF_API_KEY, default=""): str,
-                    vol.Required(NUMBER, default=""): int,
+                    vol.Required(CONF_ELSE, default="2"): int,
                 }
             ),
         )
@@ -71,9 +69,8 @@ class SolcastSolarOptionFlowHandler(OptionsFlow):
                 {
                     vol.Required(
                         CONF_API_KEY,
-                        NUMBER,
-                        default=self.config_entry.options.get(CONF_API_KEY),
-                        default=self.config_entry.options.get(NUMBER),
+                        CONF_ELSE,
+                        default=self.config_entry.options.get(CONF_API_KEY, CONF_ELSE),
                     ): str,
                 }
             ),
