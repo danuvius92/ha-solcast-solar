@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import logging
 import traceback
+from homeassistant.const import CONF_ELSE
 from dataclasses import dataclass
 from datetime import datetime as dt
 from datetime import timedelta, timezone
@@ -18,6 +19,8 @@ from aiohttp.client_reqrep import ClientResponse
 from isodate import parse_datetime
 
 _LOGGER = logging.getLogger(__name__)
+
+int divider = CONF_ELSE
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
@@ -150,7 +153,7 @@ class SolcastApi:
         """Return a rooftop sites total kw for today"""
         #g = [d for d in self._sites if d['resource_id'] == rooftopid]   
         try:
-            return ((self._data["siteinfo"][rooftopid]['tally'])/number)
+            return ((self._data["siteinfo"][rooftopid]['tally'])/divider)
         except Exception:
             return 0
 
@@ -198,7 +201,7 @@ class SolcastApi:
                 if p["period_end"].hour >= h:
                     tot += p["pv_estimate"]
             
-            return (round(tot,2)/number)
+            return (round(tot,2)/divider)
         except Exception:
             return 0
     
@@ -224,7 +227,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone()
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 / number)
+            return int(g[0]['pv_estimate'] * 1000 / divider)
         except Exception:
             return 0
 
@@ -232,7 +235,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone() + timedelta(hours=1)
             g = [d for d in self._data["forecasts"] if d['period_end'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 / number)
+            return int(g[0]['pv_estimate'] * 1000 / divider)
         except Exception:
             return 0
 
@@ -241,7 +244,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return ((round(sum(z['pv_estimate'] for z in g if z),2))/number)
+            return ((round(sum(z['pv_estimate'] for z in g if z),2))/divider)
         except Exception:
             return 0
 
@@ -251,7 +254,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int((m * 1000)/number)
+            return int((m * 1000)/divider)
         except Exception:
             return 0
 
@@ -275,7 +278,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
-            return (round(sum(z['pv_estimate'] for z in g if z),2)/number)
+            return (round(sum(z['pv_estimate'] for z in g if z),2)/divider)
         except Exception:
             return 0
 
@@ -285,7 +288,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_end'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int((m * 1000)/number)
+            return int((m * 1000)/divider)
         except Exception:
             return 0
 
@@ -519,9 +522,9 @@ class SolcastApi:
             else:
                 if lastv == 0.0:
                     #add the last one
-                    wh_hours[lastk] = ((lastv * 1000)/number)
+                    wh_hours[lastk] = ((lastv * 1000)/divider)
 
-                wh_hours[d] = ((v['pv_estimate'] * 1000)/number)
+                wh_hours[d] = ((v['pv_estimate'] * 1000)/divider)
                 
                 lastk = d
                 lastv = v['pv_estimate']
