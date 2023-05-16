@@ -265,8 +265,8 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"]         if d['period_start'].date() == da]
             h = [d for d in self._data["detailedForecasts"] if d['period_start'].date() == da]
-            return {"forecast":         g,
-                    "detailedForecast": h}
+            return {"forecast":         (g/2),
+                    "detailedForecast": (h/2)}
         except Exception:
             return {}
 
@@ -287,8 +287,8 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=futureday)
             g = [d for d in self._data["forecasts"]         if d['period_start'].date() == da]
             h = [d for d in self._data["detailedForecasts"] if d['period_start'].date() == da]
-            return {"forecast":         g,
-                    "detailedForecast": h}
+            return {"forecast":         (g/2),
+                    "detailedForecast": (h/2)}
         except Exception:
             return {}
     
@@ -297,7 +297,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone()
             g = [d for d in self._data["forecasts"] if d['period_start'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 /2)
+            return (int(g[0]['pv_estimate'] * 1000) /2)
         except Exception:
             return 0
 
@@ -305,7 +305,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone() + timedelta(hours=1)
             g = [d for d in self._data["forecasts"] if d['period_start'] == da]   
-            return int(g[0]['pv_estimate'] * 1000 /2)
+            return (int(g[0]['pv_estimate'] * 1000) /2)
         except Exception:
             return 0
 
