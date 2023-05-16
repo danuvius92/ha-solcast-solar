@@ -1,12 +1,11 @@
-# Solcast Solar
+# Solcast Solar (0.5kWh to 1kWh)
 
 Home Assistant(https://www.home-assistant.io/) Component
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 This custom component integrates the Solcast API into Home Assistant.
-
-
+This version is modified to divide each value by 2, so you can implement your solar system lower than 1 kWh. Therfore double your values on the solcast website (700w panel -> 1400w ; 600w inverter -> 1200w)
 
 ## Solcast Changes in 2023:
 Solcast now seem to offer new account creators signing up only 10 api calls per day (used to be 50). Seems the old account users still have 50 api calls
@@ -66,6 +65,7 @@ Click the Forecast option button and select the Solcast Solar option.. Click SAV
 ![img31](https://user-images.githubusercontent.com/1471841/174471633-4aa0bb1d-009e-4d33-9c41-f0b6489cb995.png)
 
 Modified from the great works of
+* oziee/ha-solcast-solar
 * dannerph/homeassistant-solcast
 * cjtapper/solcast-py
 * home-assistant-libs/forecast_solar
