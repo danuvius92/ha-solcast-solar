@@ -207,7 +207,7 @@ class SolcastApi:
         """Return a rooftop sites total kw for today"""
         #g = [d for d in self._sites if d['resource_id'] == rooftopid]   
         try:
-            return self._data["siteinfo"][rooftopid]['tally']
+            return ((self._data["siteinfo"][rooftopid]['tally'])/2)
         except Exception:
             return 0
 
@@ -239,7 +239,7 @@ class SolcastApi:
             if "loss_factor" in site:
                 d["loss_factor"] = site["loss_factor"]
 
-            return d
+            return (d/2)
         except Exception:
             return {}
 
@@ -255,7 +255,7 @@ class SolcastApi:
                 if p["period_start"].hour >= h:
                     tot += p["pv_estimate"]
             
-            return round(tot,2)
+            return (round(tot,2)/2)
         except Exception:
             return 0
     
@@ -297,7 +297,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone()
             g = [d for d in self._data["forecasts"] if d['period_start'] == da]   
-            return int(g[0]['pv_estimate'] * 1000)
+            return int(g[0]['pv_estimate'] * 1000 /2)
         except Exception:
             return 0
 
@@ -305,7 +305,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).astimezone() + timedelta(hours=1)
             g = [d for d in self._data["forecasts"] if d['period_start'] == da]   
-            return int(g[0]['pv_estimate'] * 1000)
+            return int(g[0]['pv_estimate'] * 1000 /2)
         except Exception:
             return 0
 
@@ -314,7 +314,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_start'].date() == da]
-            return round(sum(z['pv_estimate'] for z in g if z),2)
+            return (round(sum(z['pv_estimate'] for z in g if z),2) /2)
         except Exception:
             return 0
 
@@ -324,7 +324,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date()
             g = [d for d in self._data["forecasts"] if d['period_start'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int(m * 1000)
+            return int(m * 1000 /2)
         except Exception:
             return 0
 
@@ -358,7 +358,7 @@ class SolcastApi:
         try:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=dayincrement)
             g = [d for d in self._data["forecasts"] if d['period_start'].date() == da]
-            return round(sum(z['pv_estimate'] for z in g if z),2)
+            return ((round(sum(z['pv_estimate'] for z in g if z),2))/2)
         except Exception:
             return 0
 
@@ -368,7 +368,7 @@ class SolcastApi:
             da = dt.now().replace(minute=0, second=0, microsecond=0).date() + timedelta(days=1)
             g = [d for d in self._data["forecasts"] if d['period_start'].date() == da]
             m = max(z['pv_estimate'] for z in g if z) 
-            return int(m * 1000)
+            return int(m * 1000 /2)
         except Exception:
             return 0
 
@@ -651,7 +651,7 @@ class SolcastApi:
                 d = v['period_start'].astimezone().isoformat() #.isoformat()
                 if v['pv_estimate'] == 0.0:
                     if lastv > 0.0:
-                        wh_hours[d] = round(v['pv_estimate'] * 1000,0)
+                        wh_hours[d] = (round(v['pv_estimate'] * 1000,0) /2)
                     lastk = d
                     lastv = v['pv_estimate']
                 else:
@@ -659,7 +659,7 @@ class SolcastApi:
                         #add the last one
                         wh_hours[lastk] = round(lastv * 1000,0)
 
-                    wh_hours[d] = round(v['pv_estimate'] * 1000,0)
+                    wh_hours[d] = (round(v['pv_estimate'] * 1000,0)/2)
                     
                     lastk = d
                     lastv = v['pv_estimate']
